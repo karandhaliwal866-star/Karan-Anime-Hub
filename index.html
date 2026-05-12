@@ -1,72 +1,154 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Gaming Website</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: #0f172a;
-      color: white;
-    }
-    header {
-      background: black;
-      padding: 20px;
-      text-align: center;
-    }
-    nav {
-      background: #111;
-      padding: 10px;
-      text-align: center;
-    }
-    nav a {
-      color: cyan;
-      margin: 10px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    section {
-      padding: 20px;
-    }
-    .card {
-      background: #020617;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-    }
-  </style>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top English Dubbed Anime</title>
+    <style>
+        :root {
+            --bg: #0a0a0c;
+            --card: #1c1c1e;
+            --accent: #ff0000; /* YouTube Red */
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+        }
 
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .anime-card {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #333;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .anime-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .anime-title {
+            font-size: 1.4rem;
+            margin: 0 0 10px 0;
+        }
+
+        .tag {
+            background: #333;
+            color: #00ff88;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .description {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin: 15px 0 25px 0;
+            line-height: 1.5;
+        }
+
+        .yt-link {
+            display: block;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+
+        .yt-link:hover {
+            opacity: 0.9;
+        }
+
+        .dub-label {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #ffcc00;
+        }
+    </style>
+</head>
 <body>
 
-<header>
-  <h1>🎮 My Gaming Website</h1>
-  <p>Games • Tips • Updates</p>
-</header>
+    <div class="header">
+        <h1>Anime Dub Hub</h1>
+        <p>Watch Top-Rated Series in English (Official YouTube Channels)</p>
+    </div>
 
-<nav>
-  <a href="#">Home</a>
-  <a href="#">Games</a>
-  <a href="#">Tips</a>
-  <a href="#">Contact</a>
-</nav>
+    <div class="container">
 
-<section>
-  <div class="card">
-    <h2>Popular Games</h2>
-    <p>Roblox, Minecraft, Free Fire, BGMI</p>
-  </div>
+        <!-- One Punch Man (English Dub) -->
+        <div class="anime-card">
+            <span class="tag">Action / Comedy</span>
+            <h2 class="anime-title">One Punch Man</h2>
+            <p class="description">A hero who can defeat anyone with a single punch grows bored of his own power.</p>
+            <a href="https://www.youtube.com/playlist?list=PLwLSw1_eDZl3S4S_A6Oq86Y_890q2v_Wz" class="yt-link" target="_blank">▶ Play English Dub</a>
+            <span class="dub-label">Source: Muse India</span>
+        </div>
 
-  <div class="card">
-    <h2>Gaming Tips</h2>
-    <p>✔ Practice daily<br>✔ Use headphones<br>✔ Learn controls</p>
-  </div>
+        <!-- Spy x Family (English Dub) -->
+        <div class="anime-card">
+            <span class="tag">Spy / Slice of Life</span>
+            <h2 class="anime-title">Spy x Family</h2>
+            <p class="description">A spy, an assassin, and a telepath pretend to be a family to save the world.</p>
+            <a href="https://www.youtube.com/playlist?list=PLwLSw1_eDZl0-n2X_0pPZpX7V6z6X8yWp" class="yt-link" target="_blank">▶ Play English Dub</a>
+            <span class="dub-label">Source: Muse India</span>
+        </div>
 
-  <div class="card">
-    <h2>Contact</h2>
-    <p>Email: yourname@email.com</p>
-  </div>
-</section>
+        <!-- Ranking of Kings (English Dub) -->
+        <div class="anime-card">
+            <span class="tag">Adventure / Fantasy</span>
+            <h2 class="anime-title">Ranking of Kings</h2>
+            <p class="description">The story of Bojji, a deaf, powerless prince who strives to be the greatest king.</p>
+            <a href="https://www.youtube.com/playlist?list=PLxSscENEp7JiX73YyH0WnshmXshm8C1W6" class="yt-link" target="_blank">▶ Play English Dub</a>
+            <span class="dub-label">Source: Ani-One Asia</span>
+        </div>
+
+        <!-- Chainsaw Man (English Dub) -->
+        <div class="anime-card">
+            <span class="tag">Action / Dark Fantasy</span>
+            <h2 class="anime-title">Chainsaw Man</h2>
+            <p class="description">Denji makes a contract with a chainsaw devil to hunt down other devils.</p>
+            <a href="https://www.youtube.com/playlist?list=PLwLSw1_eDZl1h_6_xM6H6Y_w1kZ8E8T_k" class="yt-link" target="_blank">▶ Play English Dub</a>
+            <span class="dub-label">Source: Muse India</span>
+        </div>
+
+    </div>
 
 </body>
-</html> 
+  </html>
+              
