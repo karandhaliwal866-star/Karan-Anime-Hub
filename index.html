@@ -3,237 +3,375 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Anime Database</title>
+    <title>Anime Movie Archive - Alphabetical Finder</title>
     <style>
         :root {
-            --bg: #0f1115;
-            --card-bg: #1a1d24;
-            --accent: #00ffcc;
-            --text-white: #ffffff;
-            --text-muted: #8a94a6;
+            --bg-color: #0a0c10;
+            --card-bg: #121620;
+            --accent-color: #ff3838;
+            --text-main: #ffffff;
+            --text-sub: #a0aec0;
+            --border-color: #2d3748;
         }
 
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text-white);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 30px 15px;
         }
 
         header {
             text-align: center;
-            padding: 40px 20px;
+            margin-bottom: 30px;
         }
 
         header h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            color: var(--accent);
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+            font-size: 3rem;
+            margin: 0 0 10px 0;
+            letter-spacing: -1px;
         }
 
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 40px auto;
+        header h1 span {
+            color: var(--accent-color);
+        }
+
+        .controls-wrapper {
+            max-width: 700px;
+            margin: 0 auto;
             display: flex;
+            align-items: center;
             gap: 10px;
         }
 
-        .search-container input {
+        /* Combined Search and List Box */
+        .search-box {
             flex: 1;
-            padding: 15px;
-            border-radius: 8px;
-            border: 2px solid #2e3440;
-            background: #1a1d24;
-            color: white;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
+            display: flex;
+            gap: 12px;
+            background: #1a202c;
+            padding: 8px;
+            border-radius: 50px;
+            border: 2px solid var(--border-color);
+            transition: border-color 0.3s;
         }
 
-        .search-container input:focus {
-            border-color: var(--accent);
+        .search-box:focus-within {
+            border-color: var(--accent-color);
         }
 
-        .search-container button {
-            padding: 0 25px;
-            background: var(--accent);
-            color: #0f1115;
+        .search-box input {
+            flex: 1;
+            background: transparent;
             border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.2s;
+            padding: 12px 20px;
+            color: white;
+            font-size: 1.1rem;
+            outline: none;
         }
 
-        .search-container button:hover {
+        .search-box button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .search-box button:hover {
             opacity: 0.9;
         }
 
-        .anime-grid {
-            max-width: 1400px;
+        /* Quick A-Z Trigger Button right next to search */
+        .az-trigger-btn {
+            background: #1a202c;
+            color: var(--accent-color);
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            padding: 18px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .az-trigger-btn:hover {
+            border-color: var(--accent-color);
+            background: #232d3f;
+        }
+
+        /* Alphabet Drawer Panel */
+        .alphabet-panel {
+            max-width: 680px;
+            margin: 15px auto;
+            background: #121620;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            display: none; /* Controlled by JS toggle */
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .alphabet-panel button {
+            background: #1a202c;
+            color: white;
+            border: 1px solid var(--border-color);
+            width: 38px;
+            height: 38px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .alphabet-panel button:hover, .alphabet-panel button.active-letter {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .gallery-title {
+            max-width: 1200px;
+            margin: 40px auto 20px auto;
+            font-size: 1.6rem;
+            color: var(--text-sub);
+        }
+
+        .poster-grid {
+            max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 30px;
         }
 
-        .anime-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
+        .movie-card {
+            background: var(--card-bg);
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-            border: 1px solid #232834;
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid #1a202c;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .poster-box {
+        .movie-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-color);
+        }
+
+        .image-wrapper {
+            position: relative;
             width: 100%;
-            height: 380px;
-            background: #111;
+            padding-top: 145%;
+            overflow: hidden;
+            background-color: #000;
         }
 
-        .poster-box img {
+        .image-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
         }
 
-        .info-box {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
+        .movie-card:hover .image-wrapper img {
+            transform: scale(1.08);
         }
 
-        .title {
-            font-size: 1.2rem;
-            margin: 0 0 10px 0;
-            color: var(--text-white);
+        .movie-details {
+            padding: 15px;
+        }
+
+        .movie-name {
+            font-size: 1.1rem;
+            margin: 0 0 8px 0;
+            font-weight: 600;
+            line-height: 1.3;
+            color: #fff;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            height: 2.8rem;
         }
 
-        .meta {
+        .movie-meta {
             display: flex;
             justify-content: space-between;
             font-size: 0.85rem;
-            color: var(--accent);
+            color: var(--text-sub);
+        }
+
+        .rating {
+            color: #ffbc00;
             font-weight: bold;
-            margin-bottom: 12px;
         }
 
-        .synopsis {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 4;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .loading {
+        .message {
             text-align: center;
             grid-column: 1 / -1;
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            padding: 50px;
+            font-size: 1.3rem;
+            color: var(--text-sub);
+            padding: 60px 0;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Global Anime Encyclopedia</h1>
-        <p>Explore thousands of anime series directly from the world's largest database.</p>
-        
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="Search any anime in the world...">
-            <button onclick="searchAnime()">Search</button>
-        </div>
+        <h1>Cinema<span>Anime</span></h1>
+        <p>Search directly or explore alphabetically</p>
     </header>
 
-    <div class="anime-grid" id="anime-display">
-        <!-- JavaScript will automatically inject thousands of anime cards here -->
+    <div class="controls-wrapper">
+        <!-- Search and list integration -->
+        <div class="search-box">
+            <input type="text" id="movie-search" list="anime-list" placeholder="Type name (e.g., Naruto, Dragon Ball)..." oninput="fetchSuggestions()">
+            <datalist id="anime-list"></datalist>
+            <button onclick="displayMoviePosters()">Search Movies</button>
+        </div>
+        
+        <!-- The quick letter filter button positioned right next to it -->
+        <button class="az-trigger-btn" onclick="toggleAlphabetPanel()">🔤 A - Z Finder</button>
     </div>
 
+    <!-- Hidden letter grid that slides out -->
+    <div class="alphabet-panel" id="letter-drawer"></div>
+
+    <h2 class="gallery-title" id="display-status">Popular Feature Movies</h2>
+    <div class="poster-grid" id="gallery-container"></div>
+
     <script>
-        // Automatically load the world's top popular anime when page opens
         window.onload = function() {
-            fetchAnimeData('https://api.jikan.moe/v4/top/anime');
+            // Build the alphabetical buttons dynamically inside the panel
+            const drawer = document.getElementById('letter-drawer');
+            for (let i = 65; i <= 90; i++) {
+                const letter = String.fromCharCode(i);
+                const btn = document.createElement('button');
+                btn.innerText = letter;
+                btn.onclick = () => filterByLetter(letter, btn);
+                drawer.appendChild(btn);
+            }
+            // Load trending items as default homepage state
+            loadGalleryData('https://api.jikan.moe/v4/anime?type=movie&order_by=score&sort=desc&limit=20');
         };
 
-        // Function to search for any specific anime
-        function searchAnime() {
-            const query = document.getElementById('search-input').value.trim();
-            if(query === "") return;
-            
-            const searchUrl = `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&order_by=popularity`;
-            fetchAnimeData(searchUrl);
+        function toggleAlphabetPanel() {
+            const panel = document.getElementById('letter-drawer');
+            panel.style.display = (panel.style.display === 'flex') ? 'none' : 'flex';
         }
 
-        // Fetch data from the live global database
-        function fetchAnimeData(url) {
-            const container = document.getElementById('anime-display');
-            container.innerHTML = '<div class="loading">Summoning anime data...</div>';
+        // Triggered when clicking a specific letter
+        function filterByLetter(letter, activeBtn) {
+            // Highlight current selection
+            document.querySelectorAll('.alphabet-panel button').forEach(b => b.classList.remove('active-letter'));
+            activeBtn.classList.add('active-letter');
+            
+            document.getElementById('display-status').innerText = `Anime Movies Starting With: "${letter}"`;
+            
+            // API call filtering down exclusively to movies starting with our chosen letter symbol
+            const targetUrl = `https://api.jikan.moe/v4/anime?letter=${letter}&type=movie&order_by=title&sort=asc`;
+            loadGalleryData(targetUrl);
+        }
 
-            fetch(url)
+        let debounceTimer;
+        function fetchSuggestions() {
+            clearTimeout(debounceTimer);
+            const inputVal = document.getElementById('movie-search').value.trim();
+            if (inputVal.length < 3) return;
+
+            debounceTimer = setTimeout(() => {
+                fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(inputVal)}&limit=8`)
+                    .then(res => res.json())
+                    .then(output => {
+                        const dl = document.getElementById('anime-list');
+                        dl.innerHTML = '';
+                        if(output.data) {
+                            output.data.forEach(item => {
+                                const opt = document.createElement('option');
+                                opt.value = item.title;
+                                dl.appendChild(opt);
+                            });
+                        }
+                    }).catch(e => console.log(e));
+            }, 250);
+        }
+
+        function displayMoviePosters() {
+            const animeQuery = document.getElementById('movie-search').value.trim();
+            if(animeQuery === "") return;
+
+            // Close alphabet drawer if active to focus on search text results
+            document.getElementById('letter-drawer').style.display = 'none';
+            document.getElementById('display-status').innerText = `All Movies for: "${animeQuery}"`;
+            
+            const targetApiUrl = `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(animeQuery)}&type=movie`;
+            loadGalleryData(targetApiUrl);
+        }
+
+        function loadGalleryData(apiUrl) {
+            const targetGrid = document.getElementById('gallery-container');
+            targetGrid.innerHTML = '<div class="message">Gathering official movie poster artwork...</div>';
+
+            fetch(apiUrl)
                 .then(response => response.json())
-                .then(result => {
-                    container.innerHTML = ''; // Clear loading screen
-                    const animeList = result.data;
+                .then(payload => {
+                    targetGrid.innerHTML = ''; 
+                    const movies = payload.data;
 
-                    if(!animeList || animeList.length === 0) {
-                        container.innerHTML = '<div class="loading">No anime found by that name!</div>';
+                    if(!movies || movies.length === 0) {
+                        targetGrid.innerHTML = '<div class="message">No theatrical movie matches recorded under this index classification.</div>';
                         return;
                     }
 
-                    // Loop through the data and build a card for every anime
-                    animeList.forEach(anime => {
-                        const card = document.createElement('div');
-                        card.className = 'anime-card';
+                    movies.forEach(movie => {
+                        const movieCard = document.createElement('div');
+                        movieCard.className = 'movie-card';
 
-                        const title = anime.title;
-                        const image = anime.images.jpg.large_image_url;
-                        const score = anime.score ? `★ ${anime.score}` : '★ N/A';
-                        const type = anime.type || 'TV';
-                        const synopsis = anime.synopsis || 'No description available for this title.';
+                        const name = movie.title;
+                        const posterImg = movie.images.jpg.large_image_url;
+                        const score = movie.score ? `★ ${movie.score}` : '★ Unrated';
+                        const releaseYear = movie.year ? movie.year : 'Movie';
 
-                        card.innerHTML = `
-                            <div class="poster-box">
-                                <img src="${image}" alt="${title}" loading="lazy">
+                        movieCard.innerHTML = `
+                            <div class="image-wrapper">
+                                <img src="${posterImg}" alt="${name}" loading="lazy">
                             </div>
-                            <div class="info-box">
-                                <h3 class="title">${title}</h3>
-                                <div class="meta">
-                                    <span>${type}</span>
-                                    <span>${score}</span>
+                            <div class="movie-details">
+                                <h3 class="movie-name" title="${name}">${name}</h3>
+                                <div class="movie-meta">
+                                    <span>Year: ${releaseYear}</span>
+                                    <span class="rating">${score}</span>
                                 </div>
-                                <p class="synopsis">${synopsis}</p>
                             </div>
                         `;
-                        container.appendChild(card);
+                        targetGrid.appendChild(movieCard);
                     });
                 })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    container.innerHTML = '<div class="loading">Database connection busy. Try again in a few seconds!</div>';
+                .catch(err => {
+                    console.error(err);
+                    targetGrid.innerHTML = '<div class="message">Database rate-limited. Wait a second and click again!</div>';
                 });
         }
 
-        // Enable pressing "Enter" key to search
-        document.getElementById('search-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                searchAnime();
+        document.getElementById('movie-search').addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                displayMoviePosters();
             }
         });
     </script>
 </body>
-</html>
+    </html>
+    
